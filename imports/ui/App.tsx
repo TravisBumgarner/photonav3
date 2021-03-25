@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-import { Header, Compass } from './components'
+import { Header, NewExploration } from './components'
 
 const PageWrapper = styled.div`
   margin: 2rem;
@@ -12,18 +12,16 @@ const PageWrapper = styled.div`
   flex-direction: column;
 `
 
-const PageTitle = styled.h1`
-  height: 10vh;
-  font-size: 3rem;
-`
-
 const App = () => {
   return (
     <BrowserRouter>
       <PageWrapper>
-        <PageTitle>Photoxploration!</PageTitle>
         <Header />
-        <Compass />
+        <Switch>
+          <Route path="/new">
+            <NewExploration />
+          </Route>
+        </Switch>
       </PageWrapper>
     </BrowserRouter>
   )
