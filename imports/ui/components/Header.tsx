@@ -19,6 +19,7 @@ const links: {
   { to: '/', text: 'Home' },
   { to: '/explorations/me', text: 'My Explorations' },
   { to: '/new', text: 'New Exploration' },
+  { to: '/compass', text: 'Compass' },
 ]
 
 const Navigation = styled.ul`

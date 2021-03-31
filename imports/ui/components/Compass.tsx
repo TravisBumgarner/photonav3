@@ -1,9 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Meteor } from 'meteor/meteor'
+import { useTracker } from 'meteor/react-meteor-data'
+
+import { RoutesCollection } from '/imports/api/routes'
+
+type Direction = 'NW' | 'N' | 'NE' | 'W' | 'C' | 'E' | 'SE' | 'S' | 'SE'
 
 type TileProps = {
-  text: string
-  className: string
+  direction: Direction
+  className?: string
+  setRoute: () => void
 }
 
 const PageWrapper = styled.div`
@@ -26,14 +33,14 @@ const TileRow = styled.div`
   flex-direction: row;
 `
 
-const Tile = styled(({ text, className }: TileProps) => (
+const Tile = styled(({ direction, className, setRoute }: TileProps) => (
   <div className={className}>
     <button
       onClick={() => {
-        console.log(`Moving ${text}.`)
+        setRoute((prevRoute: Direction) => [...prevRoute, direction])
       }}
     >
-      {text}
+      {direction}
     </button>
   </div>
 ))`
@@ -53,25 +60,47 @@ const Tile = styled(({ text, className }: TileProps) => (
   }
 `
 
+const saveRoute = (route: Direction[]) => {
+  RoutesCollection.insert({
+    userId: 'Mike',
+    route,
+    createdAt: new Date(),
+  })
+}
+
+const DIRECTIONS = [
+  ['NW', 'N', 'NE'],
+  ['W', 'C', 'E'],
+  ['SW', 'S', 'SE'],
+]
+
 export const Compass = () => {
+  const [route, setRoute] = React.useState([])
+
+  const [isLoading, routes] = useTracker(() => {
+    const handle = Meteor.subscribe('routes.public')
+    const data = RoutesCollection.find().fetch()
+    console.log(RoutesCollection)
+    return [!handle.ready(), data]
+  }, [])
+
+  if (isLoading) {
+    return <p>Loading</p>
+  }
+  console.log(routes)
   return (
     <PageWrapper>
+      <button onClick={() => saveRoute(route)}>Save Route</button>
       <TileTable>
-        <TileRow>
-          <Tile text="NW" />
-          <Tile text="N" />
-          <Tile text="NE" />
-        </TileRow>
-        <TileRow>
-          <Tile text="W" />
-          <Tile text="C" />
-          <Tile text="E" />
-        </TileRow>
-        <TileRow>
-          <Tile text="SW" />
-          <Tile text="S" />
-          <Tile text="SE" />
-        </TileRow>
+        {DIRECTIONS.map((row) => {
+          return (
+            <TileRow key={row[0]}>
+              {row.map((cell) => (
+                <Tile key={cell} direction={cell} setRoute={setRoute} />
+              ))}
+            </TileRow>
+          )
+        })}
       </TileTable>
     </PageWrapper>
   )

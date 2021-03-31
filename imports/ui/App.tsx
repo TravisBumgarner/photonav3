@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
-import { Header, NewExploration } from './components'
+import { Header, NewExploration, Compass } from './components'
 
 const PageWrapper = styled.div`
   margin: 2rem;
@@ -20,6 +20,9 @@ const App = () => {
         <Switch>
           <Route path="/new">
             <NewExploration />
+          </Route>
+          <Route path="/compass">
+            <Compass />
           </Route>
         </Switch>
       </PageWrapper>
