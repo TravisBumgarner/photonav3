@@ -77,16 +77,11 @@ const DIRECTIONS = [
 export const Compass = () => {
   const [route, setRoute] = React.useState([])
 
-  const [isLoading, routes] = useTracker(() => {
-    const handle = Meteor.subscribe('routes.public')
-    const data = RoutesCollection.find().fetch()
-    console.log(RoutesCollection)
-    return [!handle.ready(), data]
+  const [routes] = useTracker(() => {
+    const routes = RoutesCollection.find().fetch()
+    return [routes]
   }, [])
 
-  if (isLoading) {
-    return <p>Loading</p>
-  }
   console.log(routes)
   return (
     <PageWrapper>
