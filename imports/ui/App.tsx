@@ -31,7 +31,7 @@ const NameInput = ({ setName }) => {
 }
 
 const App = () => {
-    const [user, setUser] = React.useContext(Context)
+    const { userId, setUserId } = React.useContext(Context)
 
     const [isReady] = useTracker(() => {
         const handles = [Meteor.subscribe('routes.public')]
@@ -39,8 +39,8 @@ const App = () => {
         return [isReady]
     }, [])
 
-    if (!user) {
-        return <NameInput setName={setUser} />
+    if (!userId) {
+        return <NameInput setName={setUserId} />
     }
 
     if (!isReady) {

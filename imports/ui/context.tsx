@@ -24,15 +24,15 @@ import React from 'react'
 //     }
 // }
 
-const Context = React.createContext<[string, (a: string) => void]>([
-    '',
-    () => null,
-])
+const Context = React.createContext<{
+    userId: string
+    setUserId: (a: string) => void
+}>({ userId: '', setUserId: () => null })
 
 const ContextProvider = (props: any) => {
-    const [name, setName] = React.useState('')
+    const [userId, setUserId] = React.useState('')
     return (
-        <Context.Provider value={[name, setName]}>
+        <Context.Provider value={{ userId, setUserId }}>
             {props.children}
         </Context.Provider>
     )
